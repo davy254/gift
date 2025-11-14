@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday My Love</title>
+  <style>
+    * {margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+    body {background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);display:flex;justify-content:center;align-items:center;min-height:100vh;overflow-x:hidden;color:#fff;text-align:center;padding:20px;}
+
+    .content-wrapper {display:flex;flex-direction:column;align-items:center;width:100%;max-width:600px;}
+
+    .countdown-container, .surprise-container {transition: opacity 1s ease, transform 1s ease; width: 100%;}
+    .hidden {opacity: 0; pointer-events: none; transform: scale(0.9);}
+    .visible {opacity: 1; pointer-events: all; transform: scale(1);}
+
+    h1 {font-size:2em;margin-bottom:15px;}
+    .timer {font-size:1.4em;letter-spacing:1px;font-weight:bold;}
+
+    .title-container {margin-bottom:20px; display:flex; flex-direction:column; align-items:center;}
+
+    .wishes-container {display:flex;justify-content:center;align-items:flex-start;flex-direction:column;width:100%;margin:0 auto;position:relative; padding-top:50px; margin-bottom:50px;}
+    .wish {opacity:0; transform: translateY(20px); transition: opacity 2s ease, transform 2s ease; font-size:1.2em; margin:10px 0; position:absolute; width:100%;}
+    .wish.active {opacity:1; transform: translateY(0);}
+
+    .gallery-container {margin-top:50px; overflow: hidden; width: 100%; display: flex; justify-content: center; position: relative; height:150px;}
+    .gallery-track {display: flex; position: relative; width: 100%; height: 100%;}
+    .gallery-track img {position: absolute; top:50%; left:50%; width:120px; height:120px; object-fit:cover; border-radius:10px; opacity:0; transform: translate(-50%, -50%) translateX(100%); transition: transform 0.8s ease, opacity 0.8s ease;}
+
+    .heart {position:absolute;bottom:0;width:15px;height:15px;background-color:rgba(255,255,255,0.8);clip-path: polygon(50% 0%, 61% 19%, 82% 19%, 68% 36%, 73% 57%, 50% 47%, 27% 57%, 32% 36%, 18% 19%, 39% 19%);animation: floatUp 4s linear infinite;}
+    @keyframes floatUp {0% {transform: translateY(0) scale(1);opacity:1;}100% {transform: translateY(-600px) scale(1.3);opacity:0;}}
+
+    #musicToggle {margin:15px auto 0 auto; position:static; width:140px; padding:10px 20px; border-radius:8px; background:#ff4d6d; font-size:18px; font-weight:600; color:#fff; cursor:pointer; box-shadow:0 0 10px rgba(255,255,255,0.4); transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;}
+    #musicToggle:hover {transform:scale(1.05); box-shadow:0 0 15px rgba(255,255,255,0.6);} 
+    #musicToggle.playing {background-color:#28a745;} 
+    #musicToggle.paused {background-color:#dc3545;}
+
+    @media (max-width: 768px) {
+      h1 {font-size:1.6em;}
+      .timer {font-size:1.2em;}
+      .wish {font-size:1em;}
+      .gallery-track img {width:100px;height:100px;}
+      #musicToggle {width:120px; font-size:16px; padding:8px 16px;}
+    }
+
+    @media (max-width: 480px) {
+      h1 {font-size:1.4em;}
+      .timer {font-size:1em;}
+      .wish {font-size:0.9em;}
+      .gallery-track img {width:80px;height:80px;}
+      #musicToggle {width:100px; font-size:14px; padding:6px 12px;}
+      body {padding:10px;}
+    }
+  </style>
+</head>
+<body>
+  <div class="content-wrapper">
+    <div id="countdown" class="countdown-container visible">
+      <h1>Countdown to My Queen’s Birthday 🎉</h1>
+      <div id="timer" class="timer"></div>
+    </div>
+
+    <div id="surprise" class="surprise-container hidden">
+      <div class="title-container">
+        <h1>Happy Birthday, My Queen 💖</h1>
+        <div id="musicToggle" class="paused" title="Toggle Music">Play</div>
+      </div>
+
+      <div class="wishes-container">
+        <div class="wish">You’re the melody that sweetens my every day 🎶</div>
+        <div class="wish">Your smile is my favorite sunrise ☀️</div>
+        <div class="wish">Every moment with you is a beautiful story 📖</div>
+        <div class="wish">You deserve all the love in the world 🌍</div>
+        <div class="wish">I’m so grateful to call you mine ❤️</div>
+      </div>
+
+      <div class="gallery-container">
+        <div class="gallery-track" id="gallery">
+          <img src="Lauryn/1.jpg" alt="Lauryn 1">
+          <img src="Lauryn/2.jpg" alt="Lauryn 2">
+          <img src="Lauryn/3.jpg" alt="Lauryn 3">
+          <img src="Lauryn/4.jpg" alt="Lauryn 4">
+          <img src="Lauryn/5.jpg" alt="Lauryn 5">
+          <img src="Lauryn/6.jpg" alt="Lauryn 6">
+          <img src="Lauryn/7.jpg" alt="Lauryn 7">
+          <img src="Lauryn/8.jpg" alt="Lauryn 8">
+          <img src="Lauryn/9.jpg" alt="Lauryn 9">
+          <img src="Lauryn/10.jpg" alt="Lauryn 10">
+          <img src="Lauryn/11.jpg" alt="Lauryn 11">
+          <img src="Lauryn/12.jpg" alt="Lauryn 12">
+          <img src="Lauryn/13.jpg" alt="Lauryn 13">
+          <img src="Lauryn/14.jpg" alt="Lauryn 14">
+          <img src="Lauryn/15.jpg" alt="Lauryn 15">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <audio id="bgMusic" src="hb.mp3" loop preload="auto"></audio>
+
+  <script>
+    const countdown = document.getElementById('countdown');
+    const surprise = document.getElementById('surprise');
+    const timer = document.getElementById('timer');
+    const bgMusic = document.getElementById('bgMusic');
+    const musicToggle = document.getElementById('musicToggle');
+    const galleryImages = document.querySelectorAll('.gallery-track img');
+
+    const targetDate = new Date('November 16, 2025 00:00:00').getTime();
+
+    const interval = setInterval(() => {
+      const now = Date.now();
+      const distance = targetDate - now;
+      if (distance < 0) {
+        clearInterval(interval);
+        countdown.classList.replace('visible','hidden');
+        surprise.classList.replace('hidden','visible');
+        showWishes();
+        startHearts();
+        slideGallerySequential();
+        return;
+      }
+      const days = Math.floor(distance / (1000*60*60*24));
+      const hours = Math.floor((distance % (1000*60*60*24))/(1000*60*60));
+      const minutes = Math.floor((distance % (1000*60*60))/(1000*60));
+      const seconds = Math.floor((distance % (1000*60))/1000);
+      timer.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    },1000);
+
+    function showWishes(){
+      const wishes = document.querySelectorAll('.wish');
+      let index = 0;
+      function nextWish(){
+        wishes.forEach(w=>w.classList.remove('active'));
+        wishes[index].classList.add('active');
+        index = (index + 1) % wishes.length;
+        setTimeout(nextWish, 4000);
+      }
+      nextWish();
+    }
+
+    function startHearts(){
+      setInterval(()=>{
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.style.left = Math.random()*100+'vw';
+        heart.style.animationDuration = 3 + Math.random()*3 + 's';
+        document.body.appendChild(heart);
+        setTimeout(()=>heart.remove(),6000);
+      },300);
+    }
+
+    function slideGallerySequential(){
+      let index = 0;
+      function showNext(){
+        galleryImages.forEach((img,i)=>{
+          img.style.opacity = '0';
+          img.style.transform = 'translate(-50%, -50%) translateX(100%)';
+        });
+        const img = galleryImages[index];
+        img.style.opacity = '1';
+        img.style.transform = 'translate(-50%, -50%) translateX(0)';
+        setTimeout(()=>{
+          img.style.opacity = '0';
+          img.style.transform = 'translate(-50%, -50%) translateX(0)'; // keep in center briefly
+          setTimeout(()=>{
+            img.style.transform = 'translate(-50%, -50%) translateX(-100%)';
+            index = (index + 1) % galleryImages.length;
+            setTimeout(showNext, 400); // next image
+          }, 1200); // stay in center duration
+        }, 2000); // initial display duration
+      }
+      showNext();
+    }
+
+    function setButtonState(isPlaying){
+      musicToggle.textContent = isPlaying ? 'Pause' : 'Play';
+      musicToggle.classList.toggle('playing', isPlaying);
+      musicToggle.classList.toggle('paused', !isPlaying);
+    }
+
+    async function toggleMusic(){
+      try{
+        if(bgMusic.paused){
+          await bgMusic.play();
+          setButtonState(true);
+        } else {
+          bgMusic.pause();
+          setButtonState(false);
+        }
+      } catch(e){
+        setButtonState(!bgMusic.paused);
+      }
+    }
+
+    window.addEventListener('load', async ()=>{
+      try{
+        await bgMusic.play();
+        setButtonState(true);
+      } catch(e){
+        setButtonState(false);
+      }
+    });
+
+    musicToggle.addEventListener('click', (e)=>{ e.stopPropagation(); toggleMusic(); });
+    document.body.addEventListener('click', (e)=>{ if(e.target.id !== 'musicToggle') toggleMusic(); });
+    bgMusic.addEventListener('play', ()=>setButtonState(true));
+    bgMusic.addEventListener('pause', ()=>setButtonState(false));
+  </script>
+</body>
+</html>
